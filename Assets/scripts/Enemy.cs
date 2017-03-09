@@ -4,18 +4,26 @@ using System.Collections;
 
 public class Enemy : BaseUnit {
 
-    int moveXOffset = 1;
-    int moveYOffset = 1;
-    float moveSpeed = 0.5f;
+    public int moveXOffset = 1;
+    public int moveYOffset = 1;
+    public float moveSpeed = 0.5f;
+    
+    public Vector2 nextPos;
+
+    public GameObject debugTarget;
+
 
     void Start()
     {
+        debugTarget = Instantiate(debugTarget);
+
         Move();
+        
     }
 
     void Update()
     {
-
+        Debug.Log(transform.forward.ToString());
 
     }
 
@@ -31,9 +39,21 @@ public class Enemy : BaseUnit {
 
     void Move()
     {
-        Vector2 newPos = FindNextPosition();
-        transform.DOMove(newPos, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(Move);
-        transform.DORotate(newPos, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear);
+        this.nextPos = FindNextPosition();
+        debugTarget.transform.position = this.nextPos;
+        transform.DOMove(nextPos, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(Move);
+
+        transform.DOLookAt(nextPos, moveSpeed).SetSpeedBased(true).SetEase(Ease.InSine);
     }
+
+
+   public override void OnDeath()
+    {
+
+
+        Destroy(debugTarget);
+    }
+
+
 
 }
