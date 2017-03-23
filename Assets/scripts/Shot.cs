@@ -8,6 +8,7 @@ public class Shot : BaseUnit {
 
     public Rigidbody2D rb;
     public Collider2D coll;
+    public Renderer rend;
 
     public float forceMultiplier;
 
@@ -17,7 +18,7 @@ public class Shot : BaseUnit {
 
     public int idleLayer;
     public int detectLayer;
-
+    public float heightCap = 1.2f;
 
     private int hitMultiplier = 1;
     public int baseScore;
@@ -26,18 +27,19 @@ public class Shot : BaseUnit {
 	void Start ()
     {
         rb.Sleep();
-       // coll.enabled = false;
+        // coll.enabled = false;
         //startPosition = transform.position;
-
+        rend = GetComponent<Renderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if(state == BallState.Streching)
+       
+        if (state == BallState.Streching)
         {
-
+           // var touchPos = Input.GetTouch(0).position;
             var mousePos = Input.mousePosition;
             mousePos.z = 10.0f;
             strechPosition = Camera.main.ScreenToWorldPoint(mousePos);
@@ -47,7 +49,16 @@ public class Shot : BaseUnit {
 
         }
 
-       
+        //check if offScreen , but give a bit of room on the top
+
+        Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
+        if (state == BallState.InFlight &&  !rend.isVisible && !(pos.y > 1) || pos.y > heightCap)
+        {
+            Debug.Log(pos.ToString() + " Off Screen");
+           Destroy(gameObject);
+        }
+
+
     }
 
     void OnMouseDown()

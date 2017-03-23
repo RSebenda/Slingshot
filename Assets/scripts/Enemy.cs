@@ -8,7 +8,7 @@ public class Enemy : BaseUnit {
     public int moveYOffset = 1;
     public int randomDirectionCap = 30;
     public float moveSpeed = 0.5f;
-    
+    public float rotationSpeed = 5;
     public Vector2 nextPos;
 
     public GameObject debugTarget;
@@ -24,7 +24,6 @@ public class Enemy : BaseUnit {
 
     void Update()
     {
-        Debug.Log(transform.forward.ToString());
 
     }
 
@@ -40,24 +39,25 @@ public class Enemy : BaseUnit {
     void FindNextDirection()
     {
         float randomRot = Random.Range(-randomDirectionCap, randomDirectionCap) + transform.position.z;
-        // transform.rotation = Quaternion.Euler(0, 0, randomRot);
+   
+        Vector3 nextDirection = Quaternion.Euler(0, 0, randomRot) * Vector3.down;
+        //Debug.Log(nextDirection);
 
-        Quaternion nextDirection = Quaternion.Euler(0, 0, randomRot);
-        transform.DORotate(new Vector3(0,0, randomRot), 20).SetSpeedBased(true);
-        Vector3 pos = transform.position;
-        this.nextPos =  pos + nextDirection.eulerAngles;
+
+        this.nextPos = (nextDirection * 2)+ transform.position;
+        transform.DORotate(new Vector3(0,0, randomRot), rotationSpeed).SetSpeedBased(true).SetEase(Ease.InOutBounce);
+
        
     }
 
 
     void Move()
     {
-        //this.nextPos = FindNextPosition();
+
         FindNextDirection();
         debugTarget.transform.position = this.nextPos;
         transform.DOMove(nextPos, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(Move);
 
-        //transform.DORotate(nextPos, moveSpeed).SetSpeedBased(true).SetEase(Ease.InSine);
     }
 
 

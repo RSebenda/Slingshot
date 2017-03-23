@@ -43,9 +43,9 @@ public class GameManager : Singleton<GameManager>
         while (!gameOver)
         {
             Vector3 spawnPos = Vector3.zero;
-            Quaternion quat = new Quaternion();
-            GameObject go = Instantiate(baseEnemy, GenerateSpawnPosition(), quat);
-
+ 
+            GameObject go = Instantiate(baseEnemy);
+            go.transform.position = GenerateSpawnPosition();
             //go.transform.position = GenerateSpawnPosition();
 
             yield return new WaitForSeconds(enemySpawnTimer);
