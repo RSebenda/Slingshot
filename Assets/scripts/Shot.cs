@@ -81,6 +81,7 @@ public class Shot : BaseUnit {
             this.gameObject.layer = detectLayer;
             state = BallState.InFlight;
             rb.WakeUp();
+            rb.velocity = Vector2.zero;
 
             //test flight
             

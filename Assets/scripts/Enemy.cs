@@ -13,6 +13,7 @@ public class Enemy : BaseUnit {
 
     public GameObject debugTarget;
 
+    public Ease rotEase;
 
     void Start()
     {
@@ -45,7 +46,7 @@ public class Enemy : BaseUnit {
 
 
         this.nextPos = (nextDirection * 2)+ transform.position;
-        transform.DORotate(new Vector3(0,0, randomRot), rotationSpeed).SetSpeedBased(true).SetEase(Ease.InOutBounce);
+        transform.DORotate(new Vector3(0,0, randomRot), rotationSpeed).SetEase(rotEase);
 
        
     }
