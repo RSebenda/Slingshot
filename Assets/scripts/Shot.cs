@@ -41,7 +41,7 @@ public class Shot : BaseUnit {
         {
            // var touchPos = Input.GetTouch(0).position;
             var mousePos = Input.mousePosition;
-            mousePos.z = 10.0f;
+            //mousePos.z = 0.0f;
             strechPosition = Camera.main.ScreenToWorldPoint(mousePos);
 
             this.transform.position = strechPosition;
@@ -54,7 +54,7 @@ public class Shot : BaseUnit {
         Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
         if (state == BallState.InFlight &&  !rend.isVisible && !(pos.y > 1) || pos.y > heightCap)
         {
-            Debug.Log(pos.ToString() + " Off Screen");
+            //Debug.Log(pos.ToString() + " Off Screen");
            Destroy(gameObject);
         }
 
@@ -65,7 +65,7 @@ public class Shot : BaseUnit {
     {
         if (state == BallState.AtRest)
         {
-            Debug.Log("---> click: ");
+            Debug.Log(string.Format("mouse click at {0} ", Camera.main.ScreenToWorldPoint(Input.mousePosition)));
             state = BallState.Streching;
         }
     }
