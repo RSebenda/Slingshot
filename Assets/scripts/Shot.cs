@@ -23,10 +23,13 @@ public class Shot : BaseUnit {
     private int hitMultiplier = 1;
     public int baseScore;
 
+    public float rayDistance = 40.0f;
+
 	// Use this for initialization
 	void Start ()
     {
         rb.Sleep();
+        rb.isKinematic = true;
         // coll.enabled = false;
         //startPosition = transform.position;
         rend = GetComponent<Renderer>();
@@ -42,9 +45,27 @@ public class Shot : BaseUnit {
            // var touchPos = Input.GetTouch(0).position;
             var mousePos = Input.mousePosition;
             //mousePos.z = 0.0f;
-            strechPosition = Camera.main.ScreenToWorldPoint(mousePos);
+            //strechPosition = Camera.main.ScreenToWorldPoint(mousePos);
+            Ray ray = Camera.main.ScreenPointToRay(mousePos);
+            RaycastHit hit;
 
-            this.transform.position = strechPosition;
+            if(Physics.Raycast (ray, out hit, rayDistance))
+            {
+                Debug.Log(string.Format("mouse click at {0} ", hit.point));
+                Debug.Log(hit.transform.name);
+                if (hit.transform.CompareTag("HitWall"))
+                {
+                    Debug.Log("hitting wall?");
+                    //Debug.DrawLine(Camera.main.transform.position, hit.point, Color.red);
+                    strechPosition = hit.point;
+                    transform.position = strechPosition;
+                    
+
+                }
+            }
+
+
+            //this.transform.position = strechPosition;
 
 
         }
@@ -80,6 +101,7 @@ public class Shot : BaseUnit {
         {
             this.gameObject.layer = detectLayer;
             state = BallState.InFlight;
+            rb.isKinematic = false;
             rb.WakeUp();
             rb.velocity = Vector2.zero;
 
