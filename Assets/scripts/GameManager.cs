@@ -5,12 +5,15 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     public bool gameOver = false;
+    //cakes list, game over is 0
+    public List<Cake> cakes;
 
 
     public GameObject baseShot;
 
     public GameObject baseEnemy;
-    public float enemySpawnTimer;
+    public float minSpawnTime;
+    public float maxSpawnTime;
 
     //1/2 width of the screen so you can spawn between -x to x
     public float enemySpawnXWidth;
@@ -20,6 +23,7 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
+        cakes = new List<Cake>();
         SlingShotManager.Instance.SpawnShot();
         StartCoroutine("SpawnEnemies");
     }
@@ -32,9 +36,7 @@ public class GameManager : Singleton<GameManager>
 
         Instantiate(baseShot);
 
-
     }
-
 
 
     IEnumerator SpawnEnemies()
@@ -47,7 +49,7 @@ public class GameManager : Singleton<GameManager>
             GameObject go = Instantiate(baseEnemy);
             go.transform.position = GenerateSpawnPosition();
             //go.transform.position = GenerateSpawnPosition();
-
+            float enemySpawnTimer = Random.Range(minSpawnTime, maxSpawnTime);
             yield return new WaitForSeconds(enemySpawnTimer);
 
         }
@@ -55,9 +57,6 @@ public class GameManager : Singleton<GameManager>
 
 
    
-
-
-
     public Vector3 GenerateSpawnPosition()
     {
         Vector3 pos = new Vector3();
@@ -68,5 +67,49 @@ public class GameManager : Singleton<GameManager>
 
         return pos;
     }
+
+
+
+
+    public void GameOver()
+    {
+        gameOver = true;
+        StopAllCoroutines();
+        Time.timeScale = 0;
+        CheckHighScore();
+
+    }
+
+    public bool CheckHighScore()
+    {
+        int hs = PlayerPrefs.GetInt("highScore");
+
+        if(ScoreManager.Instance.Score > hs)
+        {
+            PlayerPrefs.SetInt("highScore", ScoreManager.Instance.Score);
+            return true;
+        }
+
+        return false;
+    }
+
+    public void AddCake(Cake cake)
+    {
+        cakes.Add(cake);
+
+    }
+
+    public void RemoveCake(Cake cake)
+    {
+        cakes.Remove(cake);
+        if(cakes.Count == 0)
+        {
+            GameOver();
+
+        }
+
+
+    }
+
 
 }

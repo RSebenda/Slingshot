@@ -1,24 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainScreen : UIScreen {
 
 
 
 
-    void OnPlayButton()
+    public void OnPlayButton()
     {
+
+        SceneManager.LoadScene("MainScene");
 
     }
 
 
-    void OnHowToPlayButton()
+    public void OnHowToPlayButton()
     {
 
     }
 
-    void OnAboutButton()
+    public void OnAboutButton()
     {
 
     }

@@ -51,11 +51,11 @@ public class Shot : BaseUnit {
 
             if(Physics.Raycast (ray, out hit, rayDistance))
             {
-                Debug.Log(string.Format("mouse click at {0} ", hit.point));
-                Debug.Log(hit.transform.name);
+                //Debug.Log(string.Format("mouse click at {0} ", hit.point));
+                //Debug.Log(hit.transform.name);
                 if (hit.transform.CompareTag("HitWall"))
                 {
-                    Debug.Log("hitting wall?");
+                    //Debug.Log("hitting wall?");
                     //Debug.DrawLine(Camera.main.transform.position, hit.point, Color.red);
                     strechPosition = hit.point;
                     transform.position = strechPosition;
@@ -86,19 +86,21 @@ public class Shot : BaseUnit {
     {
         if (state == BallState.AtRest)
         {
-            Debug.Log(string.Format("mouse click at {0} ", Camera.main.ScreenToWorldPoint(Input.mousePosition)));
+            //Debug.Log(string.Format("mouse click at {0} ", Camera.main.ScreenToWorldPoint(Input.mousePosition)));
+            AudioManager.Instance.OnSlingStretch();
             state = BallState.Streching;
         }
     }
 
     
-
+    
     void OnMouseUp()
     {
 
-        //enter inflight state
+        //enter inflight state/shot fired
         if (state == BallState.Streching)
         {
+            AudioManager.Instance.OnShotFire();
             this.gameObject.layer = detectLayer;
             state = BallState.InFlight;
             rb.isKinematic = false;
@@ -111,7 +113,7 @@ public class Shot : BaseUnit {
             Vector2 flightDirection = startPosition - new Vector2(transform.position.x, transform.position.y);
             rb.AddForce(flightDirection * forceMultiplier, ForceMode2D.Impulse);
 
-            Debug.Log( string.Format("Shooting ball in {0} direction" , flightDirection.ToString() ));
+            //Debug.Log( string.Format("Shooting ball in {0} direction" , flightDirection.ToString() ));
 
             SlingShotManager.Instance.OnShotFire();
 
@@ -137,7 +139,7 @@ public class Shot : BaseUnit {
         if (enemy)
         {
             Debug.Log("hit an Enemy");
-            enemy.OnDeath();
+            enemy.OnDeath(baseScore * hitMultiplier);
             Destroy(coll.gameObject);
 
             //add score

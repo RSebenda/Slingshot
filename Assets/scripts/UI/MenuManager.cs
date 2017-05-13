@@ -10,6 +10,7 @@ public class MenuManager : Singleton<MenuManager> {
 
     void Awake()
     {
+        Time.timeScale = 1;
         screens = new Stack<UIScreen>();
         //always get the MainScreen First
         screens.Push(FindObjectOfType<MainScreen>());

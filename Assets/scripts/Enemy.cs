@@ -5,15 +5,24 @@ using System.Collections;
 public class Enemy : BaseUnit {
 
     public int moveXOffset = 1;
-    public int moveYOffset = 1;
+
+    public float minYOffset;
+    public float maxYOffset;
+
     public int randomDirectionCap = 30;
     public float moveSpeed = 0.5f;
     public float rotationSpeed = 5;
     public Vector2 nextPos;
 
     public GameObject debugTarget;
-
+    public GameObject scorePopup;
+    public float scoreLifetime = 1.0f;
     public Ease rotEase;
+
+    //target "cake" , set if in range
+    private Cake targetObject;
+    private bool movingToTarget = false;
+
 
     void Start()
     {
@@ -23,29 +32,33 @@ public class Enemy : BaseUnit {
         
     }
 
-    void Update()
-    {
-
-    }
+ 
 
 
-
-    Vector2 FindNextPosition()
-    {
-        float randomX = Random.Range(transform.position.x + -moveXOffset, transform.position.x + moveXOffset); 
-        Vector2 newPos = new Vector2(randomX, transform.position.y - moveYOffset);
-        return newPos;
-    }
+ 
 
     void FindNextDirection()
     {
+        //random how far left/right bomb will move 
         float randomRot = Random.Range(-randomDirectionCap, randomDirectionCap) + transform.position.z;
-   
         Vector3 nextDirection = Quaternion.Euler(0, 0, randomRot) * Vector3.down;
         //Debug.Log(nextDirection);
 
+        //random how far down the bomb with fly
+        float randomY = Random.Range(minYOffset, maxYOffset);
+        this.nextPos = (nextDirection * randomY) + transform.position;
 
-        this.nextPos = (nextDirection * 2)+ transform.position;
+        //keep bombs away frm edges to be fair to player
+        Vector3 pos = Camera.main.WorldToViewportPoint(nextPos);
+
+        if(pos.x < 0.1f || pos.x > 0.9f)
+        {
+            pos.x = (pos.x + 0.5f) / 2;
+           
+            this.nextPos = Camera.main.ViewportToWorldPoint(pos);
+        }
+
+
         transform.DORotate(new Vector3(0,0, randomRot), rotationSpeed).SetEase(rotEase);
 
        
@@ -54,13 +67,37 @@ public class Enemy : BaseUnit {
 
     void Move()
     {
+        //if free falling
+        if (!movingToTarget)
+        {
+            FindNextDirection();
+            debugTarget.transform.position = this.nextPos;
+            transform.DOMove(nextPos, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(Move);
+        }
+        else
+        {
+            transform.DOMove(targetObject.transform.position, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(BlowUp);
 
-        FindNextDirection();
-        debugTarget.transform.position = this.nextPos;
-        transform.DOMove(nextPos, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(Move);
+        }
 
     }
 
+
+    public void OnNearbyTarget(Cake cake)
+    {
+
+        if (targetObject == null)
+        {
+            targetObject = cake;
+            movingToTarget = true;
+        }
+
+    }
+    private void BlowUp()
+    {
+
+
+    }
 
    public override void OnDeath()
     {
@@ -69,6 +106,16 @@ public class Enemy : BaseUnit {
         Destroy(debugTarget);
     }
 
+    public void OnDeath(int points)
+    {
+        AudioManager.Instance.OnBombHit();
+        scorePopup = Instantiate(scorePopup);
+        ScorePopup sp = scorePopup.gameObject.GetComponent<ScorePopup>();
+        sp.Init(transform.position, points);
+
+        Destroy(scorePopup, scoreLifetime);
+        Destroy(debugTarget);
+    }
 
 
 }
