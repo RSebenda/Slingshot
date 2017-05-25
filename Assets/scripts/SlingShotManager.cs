@@ -47,7 +47,7 @@ public class SlingShotManager : Singleton<SlingShotManager> {
     //called from a Shot obj when fired
     public void OnShotFire()
     {
-       Debug.Log("onShotFire");
+ 
 
        StartCoroutine("SpawnNextShot");
     }
@@ -55,7 +55,7 @@ public class SlingShotManager : Singleton<SlingShotManager> {
 
     IEnumerator SpawnNextShot()
     {
-        Debug.Log("spawning shot in " + shotSpawnTimer.ToString());
+
 
         yield return new WaitForSeconds(shotSpawnTimer);
 
@@ -64,7 +64,7 @@ public class SlingShotManager : Singleton<SlingShotManager> {
 
    public void SpawnShot()
     {
-        Debug.Log("spawning shot");
+
         currentShot = Instantiate<Shot>(shot,shotStartPos.transform.position, shotStartPos.transform.rotation);
         currentShot.startPosition = slingCenter.transform.position;
         GenerateSling();

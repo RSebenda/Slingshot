@@ -11,10 +11,10 @@ public class Enemy : BaseUnit {
 
     public int randomDirectionCap = 30;
     public float moveSpeed = 0.5f;
-    public float rotationSpeed = 5;
+    public float rotationSpeed = 1;
     public Vector2 nextPos;
 
-    public GameObject debugTarget;
+   
     public GameObject scorePopup;
     public float scoreLifetime = 1.0f;
     public Ease rotEase;
@@ -26,7 +26,7 @@ public class Enemy : BaseUnit {
 
     void Start()
     {
-        debugTarget = Instantiate(debugTarget);
+        
         nextPos = Vector2.down;
         Move();
         
@@ -71,16 +71,30 @@ public class Enemy : BaseUnit {
         if (!movingToTarget)
         {
             FindNextDirection();
-            debugTarget.transform.position = this.nextPos;
+            
             transform.DOMove(nextPos, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(Move);
         }
         else
         {
-            transform.DOMove(targetObject.transform.position, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(BlowUp);
+            if (targetObject)
+            {
+                transform.DOMove(targetObject.transform.position, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(BlowUp);
 
+                Vector3 rotTo =   transform.position - targetObject.transform.position;
+
+                float rotz = Mathf.Atan2(rotTo.y, rotTo.x) * Mathf.Rad2Deg;
+                transform.DOLocalRotate(new Vector3(0,0, rotz - 90), rotationSpeed);
+            }
+            else
+            {
+                movingToTarget = false;
+                Move();
+            }
         }
 
     }
+
+
 
 
     public void OnNearbyTarget(Cake cake)
@@ -95,26 +109,36 @@ public class Enemy : BaseUnit {
     }
     private void BlowUp()
     {
+        if (targetObject)
+        {
+            Cake cake = targetObject.GetComponent<Cake>();
+            if (cake)
+            {
+                cake.OnDeath();
 
+            }
 
+        }
+        Destroy(this.gameObject);
     }
 
    public override void OnDeath()
     {
 
 
-        Destroy(debugTarget);
+        
     }
 
     public void OnDeath(int points)
     {
         AudioManager.Instance.OnBombHit();
         scorePopup = Instantiate(scorePopup);
-        ScorePopup sp = scorePopup.gameObject.GetComponent<ScorePopup>();
+        ScorePopup sp = scorePopup.gameObject.GetComponentInChildren<ScorePopup>();
+        scorePopup.transform.position = this.transform.position;
         sp.Init(transform.position, points);
 
         Destroy(scorePopup, scoreLifetime);
-        Destroy(debugTarget);
+        
     }
 
 

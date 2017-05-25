@@ -14,24 +14,10 @@ public class Cake : MonoBehaviour {
 
 
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Enemy e = collision.gameObject.GetComponent<Enemy>();
-        Debug.Log("triggered");
-        //if is bomb, make it move towards me!
-        if (e)
-        {
-            e.OnNearbyTarget(this);
-
-        }
-
-    }
-
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Enemy e = collision.gameObject.GetComponent<Enemy>();
-        Debug.Log("triggered");
+       
         //if is bomb, make it move towards me!
         if(e)
         {

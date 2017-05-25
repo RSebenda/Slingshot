@@ -6,7 +6,7 @@ public class GameManager : Singleton<GameManager>
 {
     public bool gameOver = false;
     //cakes list, game over is 0
-    public List<Cake> cakes;
+    public int cakeCount;
 
 
     public GameObject baseShot;
@@ -23,7 +23,7 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        cakes = new List<Cake>();
+        
         SlingShotManager.Instance.SpawnShot();
         StartCoroutine("SpawnEnemies");
     }
@@ -68,44 +68,33 @@ public class GameManager : Singleton<GameManager>
         return pos;
     }
 
-
-
+  
 
     public void GameOver()
     {
         gameOver = true;
         StopAllCoroutines();
+        
+        ScoreManager.Instance.DisplayScore();
         Time.timeScale = 0;
-        CheckHighScore();
-
     }
 
-    public bool CheckHighScore()
-    {
-        int hs = PlayerPrefs.GetInt("highScore");
-
-        if(ScoreManager.Instance.Score > hs)
-        {
-            PlayerPrefs.SetInt("highScore", ScoreManager.Instance.Score);
-            return true;
-        }
-
-        return false;
-    }
+    
 
     public void AddCake(Cake cake)
     {
-        cakes.Add(cake);
-
+        cakeCount++;
     }
 
     public void RemoveCake(Cake cake)
     {
-        cakes.Remove(cake);
-        if(cakes.Count == 0)
-        {
-            GameOver();
+        cakeCount--;
 
+        if (cakeCount == 0)
+        {
+
+            GameOver();
+            
         }
 
 

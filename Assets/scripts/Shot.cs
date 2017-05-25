@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DG.Tweening;
 
 public class Shot : BaseUnit {
 
@@ -33,6 +34,7 @@ public class Shot : BaseUnit {
         // coll.enabled = false;
         //startPosition = transform.position;
         rend = GetComponent<Renderer>();
+        transform.DOScale(1f, 1f);
     }
 
     // Update is called once per frame
@@ -42,7 +44,7 @@ public class Shot : BaseUnit {
        
         if (state == BallState.Streching)
         {
-           // var touchPos = Input.GetTouch(0).position;
+            //var touchPos = Input.GetTouch(0).position;
             var mousePos = Input.mousePosition;
             //mousePos.z = 0.0f;
             //strechPosition = Camera.main.ScreenToWorldPoint(mousePos);
@@ -55,17 +57,21 @@ public class Shot : BaseUnit {
                 //Debug.Log(hit.transform.name);
                 if (hit.transform.CompareTag("HitWall"))
                 {
-                    //Debug.Log("hitting wall?");
+                
                     //Debug.DrawLine(Camera.main.transform.position, hit.point, Color.red);
                     strechPosition = hit.point;
                     transform.position = strechPosition;
-                    
+             
 
                 }
             }
 
 
-            //this.transform.position = strechPosition;
+            if(Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended)
+            {
+                OnMouseUp();
+            }
+
 
 
         }
@@ -82,13 +88,14 @@ public class Shot : BaseUnit {
 
     }
 
-    void OnMouseDown()
+    void OnMouseOver()
     {
         if (state == BallState.AtRest)
         {
             //Debug.Log(string.Format("mouse click at {0} ", Camera.main.ScreenToWorldPoint(Input.mousePosition)));
             AudioManager.Instance.OnSlingStretch();
             state = BallState.Streching;
+            
         }
     }
 
