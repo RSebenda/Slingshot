@@ -13,6 +13,7 @@ public class Shot : BaseUnit {
 
     public float forceMultiplier;
 
+    //fake offset so shot fires in a realistic direction
     public Vector2 startPosition;
     private Vector2 strechPosition;
     public BallState state = BallState.AtRest;
@@ -82,11 +83,24 @@ public class Shot : BaseUnit {
         if (state == BallState.InFlight &&  !rend.isVisible && !(pos.y > 1) || pos.y > heightCap)
         {
             //Debug.Log(pos.ToString() + " Off Screen");
-           Destroy(gameObject);
+            //Destroy(gameObject);
+            OnDeath();
+            
         }
 
 
     }
+
+    public void Init(Vector3 startPosition, Vector3 slingPosition)
+    {
+        this.transform.position = startPosition;
+        this.startPosition = slingPosition;
+
+        state = BallState.AtRest;
+        rb.Sleep();
+        rb.isKinematic = true;
+    }
+
 
     void OnMouseOver()
     {
@@ -132,7 +146,7 @@ public class Shot : BaseUnit {
     public override void OnDeath()
     {
 
-        //GameManager.Instance.SpawnShot();
+        SlingShotManager.Instance.OnShotDeath(this);
 
     }
 

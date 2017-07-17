@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+#if UNITY_ADS
 using UnityEngine.Advertisements;
+#endif
 
 public class MenuManager : Singleton<MenuManager> {
 
@@ -84,11 +86,13 @@ public class MenuManager : Singleton<MenuManager> {
     {
 
         SceneManager.LoadScene("MainMenu");
+
+#if UNITY_ADS
         if(Advertisement.IsReady())
         {
             Advertisement.Show();
         }
-       
+#endif    
 
 
     }

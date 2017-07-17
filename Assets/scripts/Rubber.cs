@@ -17,23 +17,25 @@ public class Rubber : MonoBehaviour {
         startPos = start;
         this.shot = shot;
 
+        this.gameObject.SetActive(true);
+        lr.SetPosition(0, startPos);
+        lr.SetPosition(1, shot.transform.position);
     }
 
 	// Update is called once per frame
 	void Update () {
 
-        if(shot == null || shot.state == Shot.BallState.InFlight)
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-
+        
         lr.SetPosition(0, startPos);
         lr.SetPosition(1, shot.transform.position);
 
 
     }
 
+    public void Deactivate()
+    {
+        this.gameObject.SetActive(false);
+    }
 
 
 
