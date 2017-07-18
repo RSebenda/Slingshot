@@ -26,13 +26,22 @@ public class Enemy : BaseUnit {
 
     void Start()
     {
-        
-        nextPos = Vector2.down;
-        Move();
-        
+        scorePopup = Instantiate(scorePopup);
+
     }
 
- 
+    public void Init()
+    {
+        //reset
+        nextPos = Vector2.down;
+        movingToTarget = false;
+        targetObject = null;
+
+        
+        scorePopup.gameObject.SetActive(false);
+
+        Move();
+    }
 
 
  
@@ -119,25 +128,21 @@ public class Enemy : BaseUnit {
             }
 
         }
-        Destroy(this.gameObject);
+        this.gameObject.SetActive(false);
+        GameManager.Instance.enemies.Enqueue(this);
     }
 
-   public override void OnDeath()
-    {
 
-
-        
-    }
 
     public void OnDeath(int points)
     {
         AudioManager.Instance.OnBombHit();
-        scorePopup = Instantiate(scorePopup);
+        //scorePopup = Instantiate(scorePopup);
         ScorePopup sp = scorePopup.gameObject.GetComponentInChildren<ScorePopup>();
         scorePopup.transform.position = this.transform.position;
         sp.Init(transform.position, points);
 
-        Destroy(scorePopup, scoreLifetime);
+        //Destroy(scorePopup, scoreLifetime);
         
     }
 

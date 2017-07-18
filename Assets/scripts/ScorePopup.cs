@@ -8,7 +8,7 @@ public class ScorePopup : MonoBehaviour {
 
 
     public TextMesh tm;
-
+    private float lifeTime = 1.0f;
 
     public void Update()
     {
@@ -20,12 +20,17 @@ public class ScorePopup : MonoBehaviour {
     public void Init(Vector3 pos, int score)
     {
         this.transform.position = pos;
-        tm.text = score.ToString(); ;
+        tm.text = score.ToString();
 
-
+        this.gameObject.SetActive(true);
+        Invoke("Disable", lifeTime);
 
     }
 
+    public void Disable()
+    {
+        this.gameObject.SetActive(false);
 
+    }
 
 }

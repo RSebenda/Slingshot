@@ -96,9 +96,12 @@ public class Shot : BaseUnit {
         this.transform.position = startPosition;
         this.startPosition = slingPosition;
 
+        //reset all params
         state = BallState.AtRest;
         rb.Sleep();
         rb.isKinematic = true;
+        this.gameObject.layer = idleLayer;
+        hitMultiplier = 1;
     }
 
 
@@ -161,7 +164,9 @@ public class Shot : BaseUnit {
         {
             Debug.Log("hit an Enemy");
             enemy.OnDeath(baseScore * hitMultiplier);
-            Destroy(coll.gameObject);
+            //Destroy(coll.gameObject);
+            enemy.gameObject.SetActive(false);
+            GameManager.Instance.enemies.Enqueue(enemy);
 
             //add score
             ScoreManager.Instance.AddScore(baseScore * hitMultiplier);
