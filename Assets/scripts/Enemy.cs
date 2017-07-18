@@ -23,6 +23,9 @@ public class Enemy : BaseUnit {
     private Cake targetObject;
     private bool movingToTarget = false;
 
+    //if tween is running while "destroyed" need to kill if to prevent object from moving
+    Tweener currentTween = null;
+
 
     void Start()
     {
@@ -80,14 +83,14 @@ public class Enemy : BaseUnit {
         if (!movingToTarget)
         {
             FindNextDirection();
-            
-            transform.DOMove(nextPos, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(Move);
+
+            currentTween = transform.DOMove(nextPos, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(Move);
         }
         else
         {
             if (targetObject)
             {
-                transform.DOMove(targetObject.transform.position, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(BlowUp);
+                currentTween = transform.DOMove(targetObject.transform.position, moveSpeed).SetSpeedBased(true).SetEase(Ease.Linear).OnComplete(BlowUp);
 
                 Vector3 rotTo =   transform.position - targetObject.transform.position;
 
@@ -137,7 +140,8 @@ public class Enemy : BaseUnit {
     public void OnDeath(int points)
     {
         AudioManager.Instance.OnBombHit();
-        //scorePopup = Instantiate(scorePopup);
+        currentTween.Kill();
+
         ScorePopup sp = scorePopup.gameObject.GetComponentInChildren<ScorePopup>();
         scorePopup.transform.position = this.transform.position;
         sp.Init(transform.position, points);
