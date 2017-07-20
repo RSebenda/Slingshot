@@ -120,6 +120,8 @@ public class GameManager : Singleton<GameManager>
         cakeCount++;
     }
 
+
+    //when one cake remains, speed up spawn rate/movespeed of bombs
     public void RemoveCake(Cake cake)
     {
         cakeCount--;

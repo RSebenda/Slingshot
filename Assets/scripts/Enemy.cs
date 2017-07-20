@@ -10,7 +10,10 @@ public class Enemy : BaseUnit {
     public float maxYOffset;
 
     public int randomDirectionCap = 30;
-    public float moveSpeed = 0.5f;
+
+    public float minMoveSpeed = 1.0f;
+    public float maxMoveSpeed = 1.5f;
+    private float moveSpeed = 1.0f;
     public float rotationSpeed = 1;
     public Vector2 nextPos;
 
@@ -40,6 +43,7 @@ public class Enemy : BaseUnit {
         movingToTarget = false;
         targetObject = null;
 
+        moveSpeed = Random.Range(minMoveSpeed, maxMoveSpeed);
         
         scorePopup.gameObject.SetActive(false);
 

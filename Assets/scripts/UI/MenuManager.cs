@@ -85,8 +85,9 @@ public class MenuManager : Singleton<MenuManager> {
     public void OnGameEnd()
     {
 
-        SceneManager.LoadScene("MainMenu");
+        ShowOptions op = new ShowOptions();
 
+        op.resultCallback = LoadMenu;
 #if UNITY_ADS
         if(Advertisement.IsReady())
         {
@@ -94,10 +95,15 @@ public class MenuManager : Singleton<MenuManager> {
         }
 #endif    
 
+       
 
     }
 
+    public void LoadMenu(ShowResult result)
+    {
 
+        SceneManager.LoadScene("MainMenu");
+    }
 
 
 }
