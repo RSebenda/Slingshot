@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
-#if UNITY_ADS
 using UnityEngine.Advertisements;
-#endif
+
 
 public class MenuManager : Singleton<MenuManager> {
 
@@ -24,6 +23,10 @@ public class MenuManager : Singleton<MenuManager> {
         screens.Push(firstScreen);
         screens.Peek().gameObject.SetActive(true);
 
+
+        Advertisement.Initialize("1418035");
+        
+         
 
     }
 
@@ -56,7 +59,7 @@ public class MenuManager : Singleton<MenuManager> {
     {
 
         var screen = GetComponentInChildren<GameOverScreen>(true);
-        Debug.Log(screen);
+        
         if(isMaxScore)
         {
             screen.SetData("WoW! You got the highest score possible, Thanks for playing!", score );
@@ -85,19 +88,33 @@ public class MenuManager : Singleton<MenuManager> {
     public void OnGameEnd()
     {
 
-        ShowOptions op = new ShowOptions();
-
+        ShowOptions op = new ShowOptions(); 
         op.resultCallback = LoadMenu;
-#if UNITY_ADS
-        if(Advertisement.IsReady())
-        {
-            Advertisement.Show();
-        }
-#endif    
 
-       
+        
+        Advertisement.Show("video");
+
+
+        StartCoroutine(ShowAd());
+    
 
     }
+
+    IEnumerator ShowAd()
+    {
+        Debug.Log("start coru");
+        while (!Advertisement.IsReady())
+        {
+            yield return null;
+            Debug.Log("not ready");
+
+        }
+        Debug.Log("showing");
+        Advertisement.Show();
+
+
+    }
+
 
     public void LoadMenu(ShowResult result)
     {
