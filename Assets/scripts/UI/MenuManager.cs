@@ -23,9 +23,6 @@ public class MenuManager : Singleton<MenuManager> {
         screens.Push(firstScreen);
         screens.Peek().gameObject.SetActive(true);
 
-
-        Advertisement.Initialize("1418035");
-        
          
 
     }
@@ -92,10 +89,10 @@ public class MenuManager : Singleton<MenuManager> {
         op.resultCallback = LoadMenu;
 
         
-        Advertisement.Show("video");
+        Advertisement.Show(op);
 
 
-        StartCoroutine(ShowAd());
+
     
 
     }
@@ -116,7 +113,7 @@ public class MenuManager : Singleton<MenuManager> {
     }
 
 
-    public void LoadMenu(ShowResult result)
+    public void LoadMenu(ShowResult sr)
     {
 
         SceneManager.LoadScene("MainMenu");
