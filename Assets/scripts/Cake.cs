@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Cake : MonoBehaviour {
 
+    public GameObject explosion;
+
     public void Start()
     {
 
@@ -31,6 +33,7 @@ public class Cake : MonoBehaviour {
     public void OnDeath()
     {
         GameManager.Instance.RemoveCake(this);
+        Instantiate(explosion,transform.position, transform.rotation);
         Destroy(this.gameObject);
 
     }

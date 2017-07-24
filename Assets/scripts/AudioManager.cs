@@ -10,7 +10,9 @@ public class AudioManager : Singleton<AudioManager> {
     public AudioClip shotFire;
 
     public AudioClip bombHit;
-    public AudioClip bombExplode;
+
+    //when a cake was hit!
+    public AudioClip cakeHit;
 
 
 
@@ -45,7 +47,10 @@ public class AudioManager : Singleton<AudioManager> {
 
     }
 
-
+    public void OnCakeHit()
+    {
+        playSound(cakeHit);
+    }
 
 
 }

@@ -89,28 +89,15 @@ public class MenuManager : Singleton<MenuManager> {
         op.resultCallback = LoadMenu;
 
         
-        Advertisement.Show(op);
-
-
-
-    
-
-    }
-
-    IEnumerator ShowAd()
-    {
-        Debug.Log("start coru");
-        while (!Advertisement.IsReady())
-        {
-            yield return null;
-            Debug.Log("not ready");
-
-        }
-        Debug.Log("showing");
         Advertisement.Show();
 
+        SceneManager.LoadScene("MainMenu");
+
+
 
     }
+
+
 
 
     public void LoadMenu(ShowResult sr)
