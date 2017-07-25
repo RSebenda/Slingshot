@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90fb563405b7a1e44a087b5072cee319, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosion: {fileID: 1368359317170102, guid: 6f422f65eb1498f41bb16f87effbd3b9, type: 2}
 --- !u!212 &212006459130576102
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -129,3 +130,5 @@ SpriteRenderer:
   m_Size: {x: 6.9, y: 8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
