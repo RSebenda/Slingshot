@@ -9,7 +9,7 @@ public class Rubber : MonoBehaviour {
 
     //reference to moving ball
     public Shot shot;
-
+    public Color color;
     public LineRenderer lr;
 
     public void Init(Vector3 start, Shot shot)
@@ -20,6 +20,8 @@ public class Rubber : MonoBehaviour {
         this.gameObject.SetActive(true);
         lr.SetPosition(0, startPos);
         lr.SetPosition(1, shot.transform.position);
+        lr.startColor = color;
+        lr.endColor = color;
     }
 
 	// Update is called once per frame

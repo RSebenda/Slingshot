@@ -132,7 +132,7 @@ MonoBehaviour:
   rb: {fileID: 50000010025260236}
   coll: {fileID: 58000011458987042}
   rend: {fileID: 0}
-  forceMultiplier: 4.5
+  forceMultiplier: 5.5
   startPosition: {x: 0, y: 0}
   state: 0
   idleLayer: 8
