@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class AudioManager : Singleton<AudioManager> {
 
     public AudioSource ASource;
@@ -14,16 +15,22 @@ public class AudioManager : Singleton<AudioManager> {
     //when a cake was hit!
     public AudioClip cakeHit;
 
+    public static bool muted = false;
 
 
 
 
+    public void ToggleAudio()
+    {
+        muted = !muted;
+    
 
-
+    }
 
 
     void playSound(AudioClip clip)
     {
+        if(!muted)
         ASource.PlayOneShot(clip);
 
     }
@@ -51,6 +58,8 @@ public class AudioManager : Singleton<AudioManager> {
     {
         playSound(cakeHit);
     }
+
+
 
 
 }

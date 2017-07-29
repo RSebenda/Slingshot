@@ -2,8 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseScreen : UIScreen {
+
+
+    public Sprite audioButton;
+    public Sprite mutedAudioButton;
+
+    public Button UIButton;
+
+    public void Awake()
+    {
+        UpdateAudioButton();
+    }
 
 
     //on show
@@ -26,6 +38,31 @@ public class PauseScreen : UIScreen {
     {
         MenuManager.Instance.OnGameEnd();
 
+    }
+
+
+    public void ToggleAudio()
+    {
+        AudioManager.muted = !AudioManager.muted;
+
+        UpdateAudioButton();
+   
+    }
+
+    //shows the correct Button in the puase screen
+    public void UpdateAudioButton()
+    {
+        bool muted = AudioManager.muted;
+
+
+        if(muted)
+        {
+            UIButton.image.sprite = mutedAudioButton;
+        }
+        else
+        {
+            UIButton.image.sprite = audioButton;
+        }
     }
 
 }
